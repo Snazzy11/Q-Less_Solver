@@ -1,6 +1,10 @@
 import time
 import random
 from itertools import permutations
+import os.path
+
+# TODO: Seperate "preperation" operatinos. I.e. only load the dictionary once, not over and over when trying again
+# TODO: Ask at the start of the program how many times to try, and then loop that many times
 
 global foundWord
 foundWord = None
@@ -26,8 +30,16 @@ def rollTheDice():
   
 
 def load_dictionary():
-  """Load words from a file into a list."""
-  with open("dictionary.txt", 'r') as file:
+  # Find path to dictionary.txt file
+  scriptDirectory = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the script
+  dictionaryPath = os.path.join(scriptDirectory, 'dictionary.txt')  # Join script directory and filename
+    
+  if not os.path.exists(dictionaryPath):
+    print("Dictionary file not found!")
+    return []
+
+  # Load wordlist into a Python list (array)
+  with open(dictionaryPath, 'r') as file:
     # Read each line and strip any trailing whitespace/newlines
     words = [line.strip() for line in file]
   return words
