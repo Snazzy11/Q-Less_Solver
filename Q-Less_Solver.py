@@ -4,10 +4,9 @@ from itertools import permutations
 import os.path
 
 # TODO: Seperate "preperation" operatinos. I.e. only load the dictionary once, not over and over when trying again
+# TODO: After a certain amount of tries with (currently) 7 letter words, try again with 6 of the letters from the same dice.
+#       Ensure that we are using the same 12 letter group each time
 # TODO: Ask at the start of the program how many times to try, and then loop that many times
-
-global foundWord
-foundWord = None
 
 diceDict = [['M', 'M', 'L', 'L', 'B', 'Y'],
            ['V', 'E', 'G', 'K', 'P', 'P'],
@@ -57,8 +56,6 @@ def searchForWord(word, dictionary):
       return i
       
 
-
-
 def makeWordArr(wLen, rolledDice):
   print("Making word array")
   vowels = ['A', 'E', 'I', 'O', 'U', 'Y']
@@ -82,6 +79,7 @@ def makeWordArr(wLen, rolledDice):
         areVowels = True
   
   print("Word array being returned")
+  time.sleep(3)
   return wordLetters
 
 
@@ -105,8 +103,39 @@ def searchPermsForWords():
           break
 
 
+def tryUntilFound(foundWord, rolledDice):
+  while foundWord == None:
+    # Print "Trying again" 3 times
+    for i in range(3):
+      print("Trying again")
+      time.sleep(1)
+      startTime = time.time()
+    descrambleWordArr(makeWordArr(7, rolledDice))
+    endTime = time.time()
 
-def mainProgram():
+    totalTime = str(endTime - startTime)
+    print(f"All permutations found in {totalTime} seconds")
+
+    print("Looking for words in permutations")
+    startTime = time.time()
+
+    foundWord = searchPermsForWords()
+    endTime = time.time()
+    totalTime = str(endTime - startTime)
+    print(f"Search completed in {totalTime} seconds")
+      # Check if a word was found
+    if foundWord:
+        print("The program found this solution with the given dice: ", foundWord)
+    else:
+        print("No valid word found with the given dice.")
+        time.sleep(3)
+
+
+def startUpOps():
+  # Initialize the variable foundWord
+  global foundWord
+  foundWord = None
+
   # Turn the dictionary.txt into a list (array) and store it globally
   global dictionary 
   dictionary = load_dictionary()
@@ -114,43 +143,19 @@ def mainProgram():
   # Create the array of rolled dice that can be used to play
   # TODO: Fetch these from user input, 
   # rather than the whole game be computerized
+  global rolledDice
   rolledDice = rollTheDice()
 
   print("Rolled Dice")
   print(rolledDice)
 
+  return (foundWord, rolledDice)
 
-  startTime = time.time()
-  descrambleWordArr(makeWordArr(7, rolledDice))
-  endTime = time.time()
 
-  totalTime = str(endTime - startTime)
-  print(f"All permutations found in {totalTime} seconds")
-
-  
-  print("Looking for words in permutations")
-  startTime = time.time()
-
-  foundWord = searchPermsForWords()
-  endTime = time.time()
-  totalTime = str(endTime - startTime)
-  print(f"Search completed in {totalTime} seconds")
-    # Check if a word was found
-  if foundWord:
-      print("The program found this solution with the given dice: ", foundWord)
-  else:
-      print("No valid word found with the given dice.")
+def main():
+  startUpOps()
+  tryUntilFound(foundWord, rolledDice)
 
 
 
-def tryUntilFound():
-  while foundWord == None:
-    # Print "Trying again" 5 times
-    for i in range(5):
-      print("Trying again")  
-    mainProgram()
-
-
-
-
-tryUntilFound()
+main()
