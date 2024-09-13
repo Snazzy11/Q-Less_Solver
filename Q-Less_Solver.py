@@ -7,6 +7,7 @@ import os.path
 # TODO: After a certain amount of tries with (currently) 7 letter words, try again with 6 of the letters from the same dice.
 #       Ensure that we are using the same 12 letter group each time
 # TODO: Ask at the start of the program how many times to try, and then loop that many times
+# TODO: Multi-threading
 
 diceDict = [['M', 'M', 'L', 'L', 'B', 'Y'],
            ['V', 'E', 'G', 'K', 'P', 'P'],
