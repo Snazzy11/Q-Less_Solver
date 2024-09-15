@@ -79,7 +79,7 @@ def make_word_arr(w_len, rolled_dice):
         areVowels = True
   
   print("Word array being returned")
-  time.sleep(3)
+  time.sleep(1)
   return word_letters
 
 
@@ -105,10 +105,8 @@ def search_perms_for_words():
 
 def try_until_found(found_word, rolled_dice, w_len):
   while found_word is None:
-    # Print "Trying again" 3 times
-    for i in range(3):
-      print("Trying again")
-      time.sleep(1)
+    print("Trying again")
+    time.sleep(1)
     startTime = time.time()
     descramble_word_arr(make_word_arr(w_len, rolled_dice))
     endTime = time.time()
@@ -128,7 +126,7 @@ def try_until_found(found_word, rolled_dice, w_len):
         print("The program found this solution with the given dice: ", found_word)
     else:
         print("No valid word found with the given dice.")
-        time.sleep(3)
+        time.sleep(1)
 
 
 def start_up_ops():
