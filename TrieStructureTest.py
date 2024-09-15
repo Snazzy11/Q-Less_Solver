@@ -57,7 +57,6 @@ def load_dictionary():
 
     # Load wordlist into a Python list (array)
     with open(dictionaryPath, 'r') as file:
-        # Read each line and strip any trailing whitespace/newlines
         words = [line.strip() for line in file]
     return words
 
@@ -78,12 +77,11 @@ def search_perms_for_words(dictionary):
     for perm in perms:
         if perm in dictionary:
             print(f"Found valid word: {perm}")
-            return perm  # Return the first found word
+            return perm
         i += 1
         if i == 1000000:
           break
 
-# first passed variable used to be "word_letters", trying "perms" instead
 def search_perms_with_trie(perms, trie, given_length = len(word_letters)):
     def backtrack(path, used):
         word = ''.join(path)
@@ -131,15 +129,3 @@ def main():
 
 
 main()
-
-
-"""    print(trie.search("APPLE"))
-    print(trie.search("BANANA"))
-    print(trie.search("ORANGE"))
-    print(trie.search(word_letters))
-    print(trie.starts_with("APP"))
-    print(trie.starts_with("BAN"))
-    print(trie.starts_with("ORA"))
-    print(trie.starts_with("YEL"))
-    descramble_word_arr(word_letters)
-    insert_words()"""
