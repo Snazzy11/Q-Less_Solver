@@ -3,7 +3,6 @@ import random
 from itertools import permutations
 import os.path
 
-# TODO: Seperate "preperation" operatinos. I.e. only load the dictionary once, not over and over when trying again
 # TODO: After a certain amount of tries with (currently) 7 letter words, try again with 6 of the letters from the same dice.
 #       Ensure that we are using the same 12 letter group each time
 # TODO: Ask at the start of the program how many times to try, and then loop that many times
@@ -22,11 +21,11 @@ diceDict = [['M', 'M', 'L', 'L', 'B', 'Y'],
            ['A', 'E', 'I', 'O', 'U', 'U'],
            ['A', 'A', 'E', 'E', 'O', 'O']]
 
-def rollTheDice(): 
-  rolledDice = []
+def roll_the_dice():
+  rolled_dice = []
   for i in range(1, 13):
-    rolledDice.append(diceDict[i-1][random.randint(0, 5)])
-  return rolledDice
+    rolled_dice.append(diceDict[i - 1][random.randint(0, 5)])
+  return rolled_dice
   
 
 def load_dictionary():
@@ -45,54 +44,54 @@ def load_dictionary():
   return words
 
 
-def getWordToSearch():
+def get_word_to_search():
   word = input("What word do you want to search for: ")
   return word.upper()
 
 
-def searchForWord(word, dictionary):
+def search_for_word(word, dictionary):
   for i in range(len(dictionary)):
     if dictionary[i] == word:
       # results = word
       return i
       
 
-def makeWordArr(wLen, rolledDice):
+def make_word_arr(w_len, rolled_dice):
   print("Making word array")
   vowels = ['A', 'E', 'I', 'O', 'U', 'Y']
-  wordLetters = []
+  word_letters = []
   noRedoArray = []
   areVowels = False
 
-  while areVowels == False:
-    wordLetters.clear()
+  while not areVowels:
+    word_letters.clear()
     i = 0
-    while i < wLen:
+    while i < w_len:
       randLetterIndex = random.randint(0, 11)
     
       if randLetterIndex not in noRedoArray:
-        wordLetters.append(rolledDice[randLetterIndex])
+        word_letters.append(rolled_dice[randLetterIndex])
         noRedoArray.append(randLetterIndex)
         i += 1
-    print(wordLetters)
-    for i in range(len(wordLetters)): 
-      if wordLetters[i] in vowels:
+    print(word_letters)
+    for i in range(len(word_letters)):
+      if word_letters[i] in vowels:
         areVowels = True
   
   print("Word array being returned")
   time.sleep(3)
-  return wordLetters
+  return word_letters
 
 
-def descrambleWordArr(wordLetters):
+def descramble_word_arr(word_letters):
   print("Descrambling word array")
-  wordString = ''.join(wordLetters)
+  wordString = ''.join(word_letters)
   global perms
   perms = [''.join(p) for p in permutations(wordString)]
   print(perms)
   
 
-def searchPermsForWords():
+def search_perms_for_words():
     # Check if any permutation is a valid word in the dictionary
     i = 0
     for perm in perms:
@@ -104,38 +103,38 @@ def searchPermsForWords():
           break
 
 
-def tryUntilFound(foundWord, rolledDice):
-  while foundWord == None:
+def try_until_found(found_word, rolled_dice, w_len):
+  while found_word is None:
     # Print "Trying again" 3 times
     for i in range(3):
       print("Trying again")
       time.sleep(1)
-      startTime = time.time()
-    descrambleWordArr(makeWordArr(7, rolledDice))
+    startTime = time.time()
+    descramble_word_arr(make_word_arr(w_len, rolled_dice))
     endTime = time.time()
 
-    totalTime = str(endTime - startTime)
+    totalTime = int((endTime - startTime))
     print(f"All permutations found in {totalTime} seconds")
 
-    print("Looking for words in permutations")
+    print(f"Looking for words in {len(perms)}permutations")
     startTime = time.time()
 
-    foundWord = searchPermsForWords()
+    found_word = search_perms_for_words()
     endTime = time.time()
     totalTime = str(endTime - startTime)
     print(f"Search completed in {totalTime} seconds")
       # Check if a word was found
-    if foundWord:
-        print("The program found this solution with the given dice: ", foundWord)
+    if found_word:
+        print("The program found this solution with the given dice: ", found_word)
     else:
         print("No valid word found with the given dice.")
         time.sleep(3)
 
 
-def startUpOps():
-  # Initialize the variable foundWord
-  global foundWord
-  foundWord = None
+def start_up_ops():
+  # Initialize the variable found_word
+  global found_word
+  found_word = None
 
   # Turn the dictionary.txt into a list (array) and store it globally
   global dictionary 
@@ -145,17 +144,19 @@ def startUpOps():
   # TODO: Fetch these from user input, 
   # rather than the whole game be computerized
   global rolledDice
-  rolledDice = rollTheDice()
+  rolledDice = roll_the_dice()
 
   print("Rolled Dice")
   print(rolledDice)
 
-  return (foundWord, rolledDice)
+  w_len = int(input("What word length do you want to search for? : "))
+
+  return found_word, rolledDice, w_len
 
 
 def main():
-  startUpOps()
-  tryUntilFound(foundWord, rolledDice)
+  returned_tuple = start_up_ops()
+  try_until_found(returned_tuple[0], returned_tuple[1], returned_tuple[2])
 
 
 

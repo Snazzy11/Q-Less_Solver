@@ -1,0 +1,3 @@
+Look for any stretch of 6 or more consonants. The most consonants in a row in the english language is 6 .
+Implement a Trie structure rather than arrays
+Eliminate impossible prefixes immediately
