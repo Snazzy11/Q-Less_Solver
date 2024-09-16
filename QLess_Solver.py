@@ -3,6 +3,7 @@ import random
 from itertools import permutations
 import os.path
 
+
 # TODO: After a certain amount of tries with (currently) 7 letter words, try again with 6 of the letters from the same dice.
 #       Ensure that we are using the same 12 letter group each time
 # TODO: Ask at the start of the program how many times to try, and then loop that many times
@@ -60,23 +61,23 @@ def make_word_arr(w_len, rolled_dice):
   print("Making word array")
   vowels = ['A', 'E', 'I', 'O', 'U', 'Y']
   word_letters = []
-  noRedoArray = []
-  areVowels = False
+  no_redo_array = []
+  are_vowels = False
 
-  while not areVowels:
+  while not are_vowels:
     word_letters.clear()
     i = 0
     while i < w_len:
       randLetterIndex = random.randint(0, 11)
     
-      if randLetterIndex not in noRedoArray:
+      if randLetterIndex not in no_redo_array:
         word_letters.append(rolled_dice[randLetterIndex])
-        noRedoArray.append(randLetterIndex)
+        no_redo_array.append(randLetterIndex)
         i += 1
     print(word_letters)
     for i in range(len(word_letters)):
       if word_letters[i] in vowels:
-        areVowels = True
+        are_vowels = True
   
   print("Word array being returned")
   time.sleep(1)
@@ -141,21 +142,32 @@ def start_up_ops():
   # Create the array of rolled dice that can be used to play
   # TODO: Fetch these from user input, 
   # rather than the whole game be computerized
-  global rolledDice
-  rolledDice = roll_the_dice()
+  global rolled_dice
+  rolled_dice = roll_the_dice()
 
   print("Rolled Dice")
-  print(rolledDice)
+  print(rolled_dice)
 
   w_len = int(input("What word length do you want to search for? : "))
 
-  return found_word, rolledDice, w_len
+  return found_word, rolled_dice, w_len
 
 
 def main():
   returned_tuple = start_up_ops()
   try_until_found(returned_tuple[0], returned_tuple[1], returned_tuple[2])
 
+def new_main():
+    global rolled_dice
+    rolled_dice = roll_the_dice()
+
+    global w_len
+    w_len = int(input("What word length do you want to search for? : "))
+
+    available_letters = make_word_arr(w_len, rolled_dice)
 
 
-main()
+new_main()
+
+# Temporarily not calling main while files are merged
+# main()

@@ -2,15 +2,20 @@ from itertools import permutations
 import os.path
 import time
 
-global word_letters
+import QLess_Solver
+
+global available_letters
 # user_string = "YELKCF" # 6 letter example, FECKLY
 # user_string = "ccnirotava" # 10 letter example, VACCINATOR
 # user_string = "letsigu" # 7 letter example, UGLIEST
 # user_string = "kcissenwa" # 9 letter example, WACKINESS
-# user_string = "aagrmwsotesn" # 12 letter example, WAGONMASTERS #DOESNT WORK, not in dictionary
-user_string = "briafcaiotn" # 11 letter example, FABRICATION
+# user_string = "ssnelsemsnea" # 12 letter example, NAMELESSNESS # takes too much memory
+# user_string = "briafcaiotn" # 11 letter example, FABRICATION
 
-word_letters = user_string.upper()
+# available_letters = user_string.upper()
+available_letters = ''.join(QLess_Solver.available_letters)
+
+print(available_letters)
 
 class TrieNode:
    def __init__(self):
@@ -82,7 +87,7 @@ def search_perms_for_words(dictionary):
         if i == 1000000:
           break
 
-def search_perms_with_trie(perms, trie, given_length = len(word_letters)):
+def search_perms_with_trie(perms, trie, given_length = len(available_letters)):
     def backtrack(path, used):
         word = ''.join(path)
         if len(word) == given_length and trie.search(word):  # Check if the current path is a valid word
@@ -106,7 +111,7 @@ def main():
     print(f"Time taken to load dictionary: {stopTime - startTime}")
 
     startTime = time.time()
-    descramble_word_arr(word_letters)
+    descramble_word_arr(available_letters)
     stopTime = time.time()
     print(f"Time taken to find permutations: {stopTime - startTime}")
     print(f"Number of permutations: {len(perms)}")
@@ -127,5 +132,5 @@ def main():
     trieStopTime = time.time()
     print(f"Time taken to search trie: {trieStopTime - trieStartTime}")
 
-
+# Do not call main now that this file is imported
 main()
